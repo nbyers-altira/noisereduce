@@ -14,14 +14,14 @@ def _smoothing_filter(n_grad_freq, n_grad_time):
     smoothing_filter = np.outer(
         np.concatenate(
             [
-                np.linspace(0, 1, n_grad_freq + 1, endpoint=False),
-                np.linspace(1, 0, n_grad_freq + 2),
+                np.linspace(0, 1, n_grad_freq + 1, endpoint=False, dtype=np.float32),
+                np.linspace(1, 0, n_grad_freq + 2, dtype=np.float32),
             ]
         )[1:-1],
         np.concatenate(
             [
-                np.linspace(0, 1, n_grad_time + 1, endpoint=False),
-                np.linspace(1, 0, n_grad_time + 2),
+                np.linspace(0, 1, n_grad_time + 1, endpoint=False, dtype=np.float32),
+                np.linspace(1, 0, n_grad_time + 2, dtype=np.float32),
             ]
         )[1:-1],
     )

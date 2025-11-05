@@ -79,7 +79,7 @@ class SpectralGateNonStationary(SpectralGate):
                 # convolve the mask with a smoothing filter
                 sig_mask = fftconvolve(sig_mask, self._smoothing_filter, mode="same")
 
-            sig_mask = sig_mask * self._prop_decrease + np.ones(np.shape(sig_mask)) * (
+            sig_mask = sig_mask * self._prop_decrease + np.ones(np.shape(sig_mask), dtype=np.float32) * (
                     1.0 - self._prop_decrease
             )
 
@@ -111,5 +111,6 @@ def get_time_smoothed_representation(
     #   b**2  + (1 - b) / t_frames  - 2 = 0
     # which approximates the full-width half-max of the
     # squared frequency response of the IIR low-pass filt
-    b = (np.sqrt(1 + 4 * t_frames ** 2) - 1) / (2 * t_frames ** 2)
-    return filtfilt([b], [1, b - 1], spectral, axis=-1, padtype=None)
+    b = ((np.sqrt(1 + 4 * t_frames ** 2) - 1) / (2 * t_frames ** 2)).astype(np.float32)
+    a = [np.float32(1.0), np.float32(b - 1.0)]
+    return filtfilt([b], a, spectral, axis=-1, padtype=None)
